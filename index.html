@@ -1,47 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Garden Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f2ea;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            color: #2e663a;
-            margin-bottom: 20px;
-        }
-        a {
-            display: inline-block;
-            padding: 14px 24px;
-            background: #2e663a;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        a:hover {
-            background: #4a9d5f;
-            transform: translateY(-3px);
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Botanical Garden Map</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Welcome to the Garden Project</h1>
-    <a href="gardenmap.html">Enter Garden Map</a>
+<!-- ================= NWC HEADER ================= -->
+<div class="nwc-header">
+    <img src="nwc-logo.png" class="nwc-logo">
+    <div class="club-title">Nature and Wildlife Club, PTU</div>
+    <div class="map-title">Botanical Garden Map</div>
 </div>
+
+<!-- ================= PLANT GRID ================= -->
+<div class="garden-container">
+
+    <!-- 4-dot row -->
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('yellowChard')"><div class="dot"></div><div class="label">Yellow Chard</div></div>
+        <div class="item" onclick="showPlantInfo('mouseMelon')"><div class="dot"></div><div class="label">Mouse Melon</div></div>
+        <div class="item" onclick="showPlantInfo('longPepper')"><div class="dot"></div><div class="label">Long Pepper</div></div>
+        <div class="item" onclick="showPlantInfo('gurmar')"><div class="dot"></div><div class="label">Gurmar</div></div>
+    </div>
+
+    <!-- 4-dot row -->
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('youngBasil')"><div class="dot"></div><div class="label">Young Basil</div></div>
+        <div class="item" onclick="showPlantInfo('veldGrape')"><div class="dot"></div><div class="label">Veld Grape</div></div>
+        <div class="item" onclick="showPlantInfo('vetiverGrass')"><div class="dot"></div><div class="label">Vetiver Grass</div></div>
+        <div class="item" onclick="showPlantInfo('babelGrass')"><div class="dot"></div><div class="label">Babel Grass</div></div>
+    </div>
+
+    <!-- 4-dot row -->
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('frogFruit')"><div class="dot"></div><div class="label">Frog Fruit</div></div>
+        <div class="item" onclick="showPlantInfo('aloeVera')"><div class="dot"></div><div class="label">Aloe Vera</div></div>
+        <div class="item" onclick="showPlantInfo('hennaPlant')"><div class="dot"></div><div class="label">Henna Plant</div></div>
+        <div class="item" onclick="showPlantInfo('cardamom')"><div class="dot"></div><div class="label">Cardamom</div></div>
+    </div>
+
+    <!-- centered 3-dot rows -->
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('nightDarkShade')"><div class="dot"></div><div class="label">Night Dark Shade</div></div>
+        <div class="item" onclick="showPlantInfo('commonPurslane')"><div class="dot"></div><div class="label">Common Purslane</div></div>
+        <div class="item" onclick="showPlantInfo('snakeAloe')"><div class="dot"></div><div class="label">Snake Aloe / Dracaena</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('basil')"><div class="dot"></div><div class="label">Basil</div></div>
+        <div class="item" onclick="showPlantInfo('indianRedGinger')"><div class="dot"></div><div class="label">Indian Red Ginger</div></div>
+        <div class="item" onclick="showPlantInfo('turmeric')"><div class="dot"></div><div class="label">Turmeric</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('starGooseberry')"><div class="dot"></div><div class="label">Star Gooseberry</div></div>
+        <div class="item" onclick="showPlantInfo('kesavarthini')"><div class="dot"></div><div class="label">Kesavarthini</div></div>
+        <div class="item" onclick="showPlantInfo('holyBasil')"><div class="dot"></div><div class="label">Holy Basil</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('greenMalabarSpinach')"><div class="dot"></div><div class="label">Green Malabar Spinach</div></div>
+        <div class="item" onclick="showPlantInfo('commonWormwood')"><div class="dot"></div><div class="label">Common Wormwood</div></div>
+        <div class="item" onclick="showPlantInfo('balloonVine')"><div class="dot"></div><div class="label">Balloon Vine</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('climbingBrinjal')"><div class="dot"></div><div class="label">Climbing Brinjal</div></div>
+        <div class="item" onclick="showPlantInfo('bryophyllum')"><div class="dot"></div><div class="label">Bryophyllum</div></div>
+        <div class="item" onclick="showPlantInfo('mexicanMint')"><div class="dot"></div><div class="label">Mexican Mint</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('hibiscus')"><div class="dot"></div><div class="label">Hibiscus</div></div>
+        <div class="item" onclick="showPlantInfo('nilavembu')"><div class="dot"></div><div class="label">Nilavembu</div></div>
+        <div class="item" onclick="showPlantInfo('sweetFlag')"><div class="dot"></div><div class="label">Sweet Flag</div></div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('butterflyPea')"><div class="dot"></div><div class="label">Butterfly Pea</div></div>
+        <div class="item" onclick="showPlantInfo('madagascarPeriwinkle')"><div class="dot"></div><div class="label">Madagascar Periwinkle</div></div>
+        <div class="item" onclick="showPlantInfo('lemonGrass')"><div class="dot"></div><div class="label">Lemon Grass</div></div>
+    </div>
+
+</div>
+
+<!-- ========= MODAL ========= -->
+<div id="plantModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script src="plants.js"></script>
 
 </body>
 </html>
