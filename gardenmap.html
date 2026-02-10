@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Garden Map</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f4f2ea 0%, #e8e5d5 100%);
+        padding: 40px 20px;
+        min-height: 100vh;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2e663a;
+        margin-bottom: 40px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .garden-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin: 22px 0;
+    }
+
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 140px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .item:hover {
+        transform: translateY(-5px);
+    }
+
+    .empty {
+        width: 140px;
+    }
+
+    .dot {
+        width: 14px;
+        height: 14px;
+        background: #2e663a;
+        border-radius: 50%;
+        margin-bottom: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .item:hover .dot {
+        background: #4a9d5f;
+        transform: scale(1.5);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        text-align: center;
+        transition: color 0.3s ease;
+    }
+
+    .item:hover .label {
+        color: #2e663a;
+        font-weight: 600;
+    }
+
+    /* Gate Styles */
+    .gate-container {
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .gate {
+        position: relative;
+        width: 300px;
+        height: 350px;
+        perspective: 1000px;
+    }
+
+    .gate-arch {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #3d2817 0%, #5a3f2a 50%, #3d2817 100%);
+        border-radius: 150px 150px 0 0;
+        border: 8px solid #2e1f14;
+        position: relative;
+        box-shadow: 
+            inset 0 10px 20px rgba(0,0,0,0.5),
+            0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .gate-arch::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 80%;
+        background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+        border-radius: 100px 100px 0 0;
+        border: 3px solid #5a3f2a;
+    }
+
+    .gate-doors {
+        position: absolute;
+        top: 52%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 65%;
+        height: 75%;
+        display: flex;
+        gap: 4px;
+    }
+
+    .gate-door {
+        flex: 1;
+        background: linear-gradient(90deg, #2a1810 0%, #3d2817 50%, #2a1810 100%);
+        border: 2px solid #5a3f2a;
+        border-radius: 0 0 5px 5px;
+        position: relative;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .gate-door::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        border: 1px solid rgba(90, 63, 42, 0.5);
+        border-radius: 3px;
+    }
+
+    .gate-handle {
+        position: absolute;
+        top: 50%;
+        width: 12px;
+        height: 25px;
+        background: linear-gradient(180deg, #8b7355 0%, #5a4a3a 100%);
+        border-radius: 3px;
+        transform: translateY(-50%);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .gate-door:first-child .gate-handle {
+        right: 5px;
+    }
+
+    .gate-door:last-child .gate-handle {
+        left: 5px;
+    }
+
+    .gate-base {
+        position: absolute;
+        bottom: -20px;
+        left: -20px;
+        right: -20px;
+        height: 25px;
+        background: linear-gradient(180deg, #4a3829 0%, #3d2817 100%);
+        border: 3px solid #2e1f14;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    .gate-vines {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-image: 
+            radial-gradient(circle at 20% 50%, #2e663a 2px, transparent 2px),
+            radial-gradient(circle at 40% 30%, #4a9d5f 3px, transparent 3px),
+            radial-gradient(circle at 60% 60%, #2e663a 2px, transparent 2px),
+            radial-gradient(circle at 80% 40%, #4a9d5f 2px, transparent 2px);
+        background-size: 20px 20px;
+        opacity: 0.7;
+    }
+
+    .gate-label {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 24px;
+        font-weight: 600;
+        color: #3d2817;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        letter-spacing: 2px;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        animation: fadeIn 0.3s ease;
+        overflow-y: auto;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+        margin: 5% auto;
+        padding: 0;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 700px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        animation: slideDown 0.3s ease;
+        overflow: hidden;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #2e663a 0%, #4a9d5f 100%);
+        color: white;
+        padding: 25px 30px;
+        position: relative;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 28px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .close {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        color: white;
+        font-size: 35px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        line-height: 1;
+    }
+
+    .close:hover {
+        transform: scale(1.2);
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .info-section {
+        margin-bottom: 25px;
+    }
+
+    .info-section h3 {
+        color: #2e663a;
+        font-size: 18px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .info-section h3::before {
+        content: '🌿';
+        font-size: 20px;
+    }
+
+    .scifi-section {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border: 2px solid #0f3460;
+    }
+
+    .scifi-section h3 {
+        color: #00fff5 !important;
+        text-shadow: 0 0 10px #00fff5;
+    }
+
+    .scifi-section h3::before {
+        content: '🔬';
+    }
+
+    .scifi-name {
+        color: #00fff5;
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .scifi-description {
+        color: #e0e0e0;
+        font-size: 15px;
+        line-height: 1.8;
+        font-style: italic;
+        padding: 10px;
+        background: rgba(0, 255, 245, 0.1);
+        border-left: 3px solid #00fff5;
+        border-radius: 5px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        background: #f4f9f4;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #2e663a;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #2e663a;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #555;
+        font-size: 15px;
+    }
+
+    .strengths, .weaknesses {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .strengths {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+    }
+
+    .weaknesses {
+        background: #fff3e0;
+        border-left: 4px solid #ff9800;
+    }
+
+    .strengths h4, .weaknesses h4 {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .strengths h4 {
+        color: #2e7d32;
+    }
+
+    .weaknesses h4 {
+        color: #e65100;
+    }
+
+    .strengths ul, .weaknesses ul {
+        margin-left: 20px;
+        color: #555;
+    }
+
+    .strengths li, .weaknesses li {
+        margin: 5px 0;
+    }
+
+    @media (max-width: 768px) {
+        .row {
+            gap: 30px;
+        }
+        
+        .item {
+            width: 100px;
+        }
+
+        .label {
+            font-size: 13px;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-content {
+            width: 95%;
+            margin: 10% auto;
+        }
+
+        .gate {
+            width: 200px;
+            height: 250px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>🌱 Garden Map 🌱</h1>
+
+<div class="garden-container">
+    <!-- ========== 4 DOT ROWS ========== -->
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('yellowChard')">
+            <div class="dot"></div>
+            <div class="label">Yellow Chard</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('mouseMelon')">
+            <div class="dot"></div>
+            <div class="label">Mouse Melon</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('longPepper')">
+            <div class="dot"></div>
+            <div class="label">Long Pepper</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('gurmar')">
+            <div class="dot"></div>
+            <div class="label">Gurmar</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('youngBasil')">
+            <div class="dot"></div>
+            <div class="label">Young Basil</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('veldGrape')">
+            <div class="dot"></div>
+            <div class="label">Veld Grape</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('vetiverGrass')">
+            <div class="dot"></div>
+            <div class="label">Vetiver Grass</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('babelGrass')">
+            <div class="dot"></div>
+            <div class="label">Babel Grass</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="item" onclick="showPlantInfo('frogFruit')">
+            <div class="dot"></div>
+            <div class="label">Frog Fruit</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('aloeVera')">
+            <div class="dot"></div>
+            <div class="label">Aloe Vera</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('hennaPlant')">
+            <div class="dot"></div>
+            <div class="label">Henna Plant</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('cardamom')">
+            <div class="dot"></div>
+            <div class="label">Cardamom</div>
+        </div>
+    </div>
+
+    <!-- ========== CENTERED 3 DOT ROWS ========== -->
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('nightDarkShade')">
+            <div class="dot"></div>
+            <div class="label">Night Dark Shade</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('commonPurslane')">
+            <div class="dot"></div>
+            <div class="label">Common Purslane</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('snakeAloe')">
+            <div class="dot"></div>
+            <div class="label">Snake Aloe / Dracaena</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('basil')">
+            <div class="dot"></div>
+            <div class="label">Basil</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('indianRedGinger')">
+            <div class="dot"></div>
+            <div class="label">Indian Red Ginger</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('turmeric')">
+            <div class="dot"></div>
+            <div class="label">Turmeric</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('starGooseberry')">
+            <div class="dot"></div>
+            <div class="label">Star Gooseberry</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('kesavarthini')">
+            <div class="dot"></div>
+            <div class="label">Kesavarthini</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('holyBasil')">
+            <div class="dot"></div>
+            <div class="label">Holy Basil</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('greenMalabarSpinach')">
+            <div class="dot"></div>
+            <div class="label">Green Malabar Spinach</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('commonWormwood')">
+            <div class="dot"></div>
+            <div class="label">Common Wormwood</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('balloonVine')">
+            <div class="dot"></div>
+            <div class="label">Balloon Vine</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('climbingBrinjal')">
+            <div class="dot"></div>
+            <div class="label">Climbing Brinjal</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('bryophyllum')">
+            <div class="dot"></div>
+            <div class="label">Bryophyllum</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('mexicanMint')">
+            <div class="dot"></div>
+            <div class="label">Mexican Mint</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('hibiscus')">
+            <div class="dot"></div>
+            <div class="label">Hibiscus</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('nilavembu')">
+            <div class="dot"></div>
+            <div class="label">Nilavembu</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('sweetFlag')">
+            <div class="dot"></div>
+            <div class="label">Sweet Flag</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="item" onclick="showPlantInfo('butterflyPea')">
+            <div class="dot"></div>
+            <div class="label">Butterfly Pea</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('madagascarPeriwinkle')">
+            <div class="dot"></div>
+            <div class="label">Madagascar Periwinkle</div>
+        </div>
+        <div class="item" onclick="showPlantInfo('lemonGrass')">
+            <div class="dot"></div>
+            <div class="label">Lemon Grass</div>
+        </div>
+    </div>
+</div>
+
+<!-- Garden Gate -->
+<div class="gate-container">
+    <div class="gate">
+        <div class="gate-vines"></div>
+        <div class="gate-arch">
+            <div class="gate-doors">
+                <div class="gate-door">
+                    <div class="gate-handle"></div>
+                </div>
+                <div class="gate-door">
+                    <div class="gate-handle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="gate-base"></div>
+        <div class="gate-label">GARDEN GATE</div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="plantModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+        </div>
+        <div class="modal-body" id="modalBody">
+        </div>
+    </div>
+</div>
+
+<script>
+const plantData = {
+    yellowChard: {
+        name: "Yellow Chard (Beta vulgaris)",
+        scifiName: "Aureum Photosynthica - Golden Light Harvester",
+        scifiDescription: "A genetically optimized chlorophyll variant that converts solar radiation into nutrient-dense biomass. The golden stalks contain concentrated carotenoid matrices that enhance photon absorption efficiency by 34%. Ancient botanists engineered this cultivar to thrive in high-radiation zones.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Moderate",
+        waterNeeds: "500-750 ml per week",
+        temperature: "15-25°C (59-77°F)",
+        strengths: ["Rich in vitamins A, C, and K", "Heat-tolerant variety suitable for warm climates", "Fast-growing with continuous harvest", "Attractive ornamental value with yellow stems"],
+        weaknesses: ["Susceptible to leaf miners and aphids", "Bolts quickly in extreme heat", "Needs regular watering to prevent bitterness", "Shallow roots vulnerable to drought"]
+    },
+    mouseMelon: {
+        name: "Mouse Melon (Melothria scabra)",
+        scifiName: "Miniatura Cucurbitae - Micro-Hydration Capsule",
+        scifiDescription: "A bio-engineered climbing organism that produces miniature water-storage vessels. Each fruit contains a precisely balanced electrolyte solution with natural citric acid compounds. Field researchers use these as emergency hydration sources in arid expedition zones.",
+        sunlight: "Full Sun",
+        sunResistant: "High",
+        waterNeeds: "600-900 ml per week",
+        temperature: "20-30°C (68-86°F)",
+        strengths: ["Highly productive vining plant", "Pest and disease resistant", "Drought-tolerant once established", "Unique cucumber-lime flavor"],
+        weaknesses: ["Needs strong trellis support", "Can become invasive if not managed", "Sensitive to frost", "Requires warm soil for germination"]
+    },
+    longPepper: {
+        name: "Long Pepper (Piper longum)",
+        scifiName: "Piperus Elongatus - Neural Stimulation Vine",
+        scifiDescription: "A thermogenic climbing plant that produces alkaloid-rich spikes used in cognitive enhancement protocols. The piperine compounds trigger vasodilation and enhanced nutrient absorption pathways. Ancient healing systems classified this as a fire-element catalyst for metabolic acceleration.",
+        sunlight: "Partial Shade",
+        sunResistant: "Low to Moderate",
+        waterNeeds: "700-1000 ml per week",
+        temperature: "25-35°C (77-95°F)",
+        strengths: ["Medicinal properties in Ayurveda", "Perennial with long lifespan", "Tolerates humidity well", "Spicy culinary uses"],
+        weaknesses: ["Requires consistent moisture", "Slow growth in early stages", "Sensitive to waterlogging", "Needs warm tropical conditions"]
+    },
+    gurmar: {
+        name: "Gurmar (Gymnema sylvestre)",
+        scifiName: "Gymnema Gluco-Nullifier - Sugar Perception Inhibitor",
+        scifiDescription: "Biochemical marvel that temporarily deactivates sweet taste receptors through gymnemic acid molecules. Diabetic research stations cultivate this extensively for its glucose metabolism regulation properties. Chewing leaves creates a 'taste blackout' phenomenon for carbohydrates.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "500-700 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Sugar-blocking medicinal properties", "Drought-tolerant climber", "Low maintenance once established", "Supports diabetes management"],
+        weaknesses: ["Slow initial growth", "Needs support structure for climbing", "Susceptible to root rot if overwatered", "Leaf harvest reduces plant vigor"]
+    },
+    youngBasil: {
+        name: "Young Basil (Ocimum basilicum)",
+        scifiName: "Ocimum Juvenis - Aromatic Defense Matrix",
+        scifiDescription: "Juvenile-stage aromatic fortress plant that secretes volatile organic compounds to repel arthropod threats. Rich in eugenol and camphor molecular structures that disrupt insect navigation systems. Requires rapid harvesting before reproductive maturity reduces essential oil concentration.",
+        sunlight: "Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "400-600 ml per week",
+        temperature: "18-30°C (64-86°F)",
+        strengths: ["Fast-growing aromatic herb", "Repels mosquitoes and pests", "Rich in antioxidants", "Multiple harvests from pinching"],
+        weaknesses: ["Sensitive to cold and frost", "Prone to fungal diseases in humidity", "Requires frequent harvesting to prevent flowering", "Attracts aphids and whiteflies"]
+    },
+    veldGrape: {
+        name: "Veld Grape (Cissus quadrangularis)",
+        scifiName: "Cissus Osteo-Regenerator - Skeletal Reinforcement Succulent",
+        scifiDescription: "Quadrangular-stemmed xerophyte engineered for bone density optimization. Contains phytosteroid complexes that accelerate fracture healing by 47%. Its structural design allows survival in extreme drought conditions making it ideal for post-apocalyptic medicinal gardens.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Very High",
+        waterNeeds: "300-500 ml per week",
+        temperature: "20-40°C (68-104°F)",
+        strengths: ["Extremely drought-resistant succulent", "Medicinal uses for bone health", "Virtually indestructible, low maintenance", "Thrives in poor soil"],
+        weaknesses: ["Can rot if overwatered", "Slow growth rate", "Invasive tendencies in ideal conditions", "Sharp edges can be a hazard"]
+    },
+    vetiverGrass: {
+        name: "Vetiver Grass (Chrysopogon zizanioides)",
+        scifiName: "Vetiveria Erosion-Anchor - Deep Root Stabilizer",
+        scifiDescription: "Perennial grass with roots extending 3-4 meters vertically, forming living geological anchors. Cultivated for soil preservation and aromatic oil extraction used in olfactory therapy protocols. The root system creates natural water filtration channels while preventing landslides.",
+        sunlight: "Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "800-1200 ml per week",
+        temperature: "20-40°C (68-104°F)",
+        strengths: ["Deep roots prevent soil erosion", "Aromatic roots used in perfumery", "Tolerates extreme heat and drought", "Purifies water and soil"],
+        weaknesses: ["Requires large space to grow", "Slow to establish in first year", "Difficult to eradicate once planted", "Heavy water needs during establishment"]
+    },
+    babelGrass: {
+        name: "Babel Grass (Acorus calamus)",
+        scifiName: "Acorus Neurotropic - Wetland Cognitive Enhancer",
+        scifiDescription: "Marsh-dwelling rhizome producer containing beta-asarone compounds that modulate neurotransmitter activity. Ancient civilizations used this for memory enhancement and digestive system optimization. Thrives in waterlogged conditions unsuitable for conventional crops.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "1000-1500 ml per week",
+        temperature: "15-30°C (59-86°F)",
+        strengths: ["Medicinal rhizomes for digestive health", "Thrives in wet, marshy conditions", "Aromatic leaves repel insects", "Hardy perennial grass"],
+        weaknesses: ["Requires consistently moist soil", "Can become invasive near water bodies", "Sensitive to prolonged drought", "Slow propagation from rhizomes"]
+    },
+    frogFruit: {
+        name: "Frog Fruit (Phyla nodiflora)",
+        scifiName: "Phyla Ground-Weaver - Pollinator Magnet Carpet",
+        scifiDescription: "Low-growing ground consolidation species that attracts beneficial lepidoptera through specialized nectar glands. Forms dense living mats that suppress competing vegetation while creating micro-habitat zones. Used in ecological restoration of degraded landscapes.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "High",
+        waterNeeds: "400-600 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Excellent ground cover", "Attracts butterflies and bees", "Tolerates foot traffic", "Medicinal anti-inflammatory properties"],
+        weaknesses: ["Can become weedy and invasive", "Requires regular trimming", "Susceptible to fungal issues in shade", "May outcompete other plants"]
+    },
+    aloeVera: {
+        name: "Aloe Vera (Aloe barbadensis)",
+        scifiName: "Aloe Bio-Gel Synthesizer - Dermal Regeneration Unit",
+        scifiDescription: "Succulent pharmaceutical factory that produces polysaccharide-rich healing gel in specialized leaf chambers. The mucilaginous interior contains over 75 active compounds including enzymes, minerals, and vitamins. Emergency field medics carry cuttings for burn treatment protocols.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Very High",
+        waterNeeds: "200-400 ml per week",
+        temperature: "15-35°C (59-95°F)",
+        strengths: ["Healing gel for burns and skin care", "Extremely drought-tolerant succulent", "Low maintenance, hardy plant", "Produces offsets for propagation"],
+        weaknesses: ["Sensitive to overwatering and root rot", "Frost-sensitive, needs protection", "Susceptible to mealybugs", "Leaves turn brown in excessive sun"]
+    },
+    hennaPlant: {
+        name: "Henna Plant (Lawsonia inermis)",
+        scifiName: "Lawsonia Pigment-Producer - Natural Cooling Matrix",
+        scifiDescription: "Thermally adaptive shrub that generates lawsone molecules for temporary dermal staining and heat dissipation. The leaf paste creates an evaporative cooling effect reducing skin temperature by 2-3°C. Desert cultures use this for both ceremonial marking and heat stress management.",
+        sunlight: "Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "500-700 ml per week",
+        temperature: "25-40°C (77-104°F)",
+        strengths: ["Leaves used for natural dye and cooling paste", "Highly heat and drought tolerant", "Fragrant white flowers", "Medicinal anti-fungal properties"],
+        weaknesses: ["Slow growth in cooler climates", "Requires hot, dry conditions to thrive", "Thorny branches need careful handling", "Sensitive to frost and cold"]
+    },
+    cardamom: {
+        name: "Cardamom (Elettaria cardamomum)",
+        scifiName: "Elettaria Spice-Capsule - Humidity-Dependent Aromatic",
+        scifiDescription: "Shade-loving perennial that produces seed pods containing volatile terpene compounds. Requires 85%+ humidity and filtered light to initiate reproductive cycle. The seeds modulate digestive enzyme activity and possess antimicrobial properties against multiple pathogen strains.",
+        sunlight: "Partial Shade",
+        sunResistant: "Low",
+        waterNeeds: "1000-1500 ml per week",
+        temperature: "10-35°C (50-95°F)",
+        strengths: ["Valuable spice with medicinal properties", "Thrives in humid, shaded environments", "Perennial with multiple harvests", "Aromatic leaves and seeds"],
+        weaknesses: ["Requires high humidity and moisture", "Slow to mature (2-3 years for harvest)", "Sensitive to direct sunlight", "Prone to fungal diseases in poor drainage"]
+    },
+    nightDarkShade: {
+        name: "Night Dark Shade (Solanum nigrum)",
+        scifiName: "Solanum Nocturna - Nutritional Paradox Plant",
+        scifiDescription: "Dual-state organism producing both nutrient-rich leaves and potentially toxic berries depending on ripeness. The mature fruits contain solanine alkaloids as pest defense while tender shoots offer high iron bioavailability. Requires expert identification to prevent accidental toxin exposure.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Moderate",
+        waterNeeds: "500-700 ml per week",
+        temperature: "20-30°C (68-86°F)",
+        strengths: ["Edible leaves rich in iron and vitamins", "Fast-growing annual", "Tolerates various soil conditions", "Medicinal uses in traditional medicine"],
+        weaknesses: ["Unripe berries are toxic", "Can become weedy", "Attracts tomato hornworms", "Requires careful identification from toxic relatives"]
+    },
+    commonPurslane: {
+        name: "Common Purslane (Portulaca oleracea)",
+        scifiName: "Portulaca Omega-Source - Rapid Colonization Succulent",
+        scifiDescription: "Self-propagating omega-3 fatty acid producer that can establish populations from minimal resources. Contains more alpha-linolenic acid than most fish oils. Its aggressive growth pattern and drought resistance make it ideal for emergency food security scenarios.",
+        sunlight: "Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "300-500 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["High in omega-3 fatty acids", "Extremely drought-tolerant", "Edible leaves and stems", "Self-seeding annual"],
+        weaknesses: ["Highly invasive and spreads rapidly", "Difficult to control once established", "Can harbor pests", "Sensitive to frost"]
+    },
+    snakeAloe: {
+        name: "Snake Aloe / Dracaena (Sansevieria trifasciata)",
+        scifiName: "Sansevieria Atmosphere-Processor - Nocturnal Oxygen Generator",
+        scifiDescription: "CAM photosynthesis specialist that releases oxygen during night cycles while filtering benzene and formaldehyde from atmosphere. The rigid, sword-shaped leaves contain specialized tissue for long-term water storage. Requires minimal maintenance making it perfect for closed environment life support.",
+        sunlight: "Low Light to Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "200-400 ml per week",
+        temperature: "15-35°C (59-95°F)",
+        strengths: ["Air-purifying qualities", "Extremely low maintenance", "Tolerates neglect and irregular watering", "Grows in various light conditions"],
+        weaknesses: ["Overwatering causes root rot", "Slow growth rate", "Toxic to pets if ingested", "Sensitive to cold temperatures"]
+    },
+    basil: {
+        name: "Basil (Ocimum basilicum)",
+        scifiName: "Ocimum Culinary-Defense - Volatile Oil Arsenal",
+        scifiDescription: "Aromatic herb arsenal that deploys multiple chemical defense compounds including linalool and estragole. Continuous harvest stimulates higher essential oil production. Temperature sensitivity prevents outdoor cultivation in sub-tropical freeze zones.",
+        sunlight: "Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "400-600 ml per week",
+        temperature: "18-30°C (64-86°F)",
+        strengths: ["Aromatic culinary herb", "Repels mosquitoes and flies", "Fast-growing with continuous harvest", "Antibacterial and antioxidant properties"],
+        weaknesses: ["Frost-sensitive annual", "Bolts quickly in heat", "Prone to downy mildew", "Requires consistent moisture"]
+    },
+    indianRedGinger: {
+        name: "Indian Red Ginger (Alpinia purpurata)",
+        scifiName: "Alpinia Crimson-Bloom - Tropical Display Rhizome",
+        scifiDescription: "Ornamental ginger variant producing spectacular scarlet inflorescences that persist for extended periods. The rhizome network spreads horizontally creating dense colonies. Requires consistent moisture and warm conditions to trigger blooming protocols.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "800-1200 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Stunning red ornamental flowers", "Low maintenance perennial", "Thrives in tropical humidity", "Attracts pollinators"],
+        weaknesses: ["Requires consistent moisture", "Sensitive to cold and frost", "Needs space to spread", "Flowers may not appear in poor conditions"]
+    },
+    turmeric: {
+        name: "Turmeric (Curcuma longa)",
+        scifiName: "Curcuma Anti-Inflammatory - Golden Rhizome Healer",
+        scifiDescription: "Underground storage organ containing curcumin molecules with documented anti-inflammatory and antioxidant properties. Requires 7-10 month growing cycle before harvest. The bright orange pigment acts as natural preservative and medicinal compound.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "800-1200 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Powerful anti-inflammatory rhizomes", "Valuable culinary and medicinal spice", "Thrives in humid tropical conditions", "Perennial with annual harvest"],
+        weaknesses: ["Requires 7-10 months to mature", "Needs rich, well-drained soil", "Sensitive to waterlogging", "Dormant in winter, dies back"]
+    },
+    starGooseberry: {
+        name: "Star Gooseberry (Phyllanthus acidus)",
+        scifiName: "Phyllanthus Stellaris - Vitamin C Concentration Node",
+        scifiDescription: "Tree producing tart, star-shaped fruits with exceptional ascorbic acid content. Takes 3-4 years to reach production maturity. The fruits' extreme sourness requires processing but provides excellent preservation qualities for long-term storage.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "High",
+        waterNeeds: "700-1000 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Tart, vitamin C-rich fruits", "Ornamental tree with delicate leaves", "Tolerates heat well", "Fruits used in pickles and preserves"],
+        weaknesses: ["Slow to bear fruit (3-4 years)", "Requires regular watering when fruiting", "Susceptible to fruit flies", "Needs pruning to maintain shape"]
+    },
+    kesavarthini: {
+        name: "Kesavarthini (Eclipta prostrata)",
+        scifiName: "Eclipta Follicle-Stimulator - Hair Regeneration Ground Cover",
+        scifiDescription: "Prostrate herb containing wedelolactone and other compounds that promote melanin production and follicle health. Ancient dermatological systems used this extensively for alopecia treatment. Self-seeds aggressively creating dense medicinal carpets.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Moderate",
+        waterNeeds: "600-900 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Powerful herb for hair health in Ayurveda", "Liver protective properties", "Fast-growing ground cover", "Self-seeding annual"],
+        weaknesses: ["Can become invasive", "Requires moist soil", "Bitter taste limits culinary use", "May harbor pests"]
+    },
+    holyBasil: {
+        name: "Holy Basil (Ocimum sanctum)",
+        scifiName: "Ocimum Sanctum - Adaptogenic Stress-Neutralizer",
+        scifiDescription: "Sacred aromatic classified as adaptogen due to cortisol-modulating properties. Contains unique ursolic acid and eugenol combinations not found in common basil variants. Requires frequent harvest to prevent flowering which reduces medicinal potency.",
+        sunlight: "Full Sun",
+        sunResistant: "Moderate to High",
+        waterNeeds: "500-700 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Sacred Ayurvedic adaptogen", "Immune-boosting and stress-relieving", "Insect-repelling aromatic leaves", "Multiple harvests from one plant"],
+        weaknesses: ["Sensitive to frost and cold", "Requires regular pruning to prevent flowering", "Prone to aphids and caterpillars", "Needs consistent watering"]
+    },
+    greenMalabarSpinach: {
+        name: "Green Malabar Spinach (Basella alba)",
+        scifiName: "Basella Thermal-Greens - Heat-Loving Vine Vegetable",
+        scifiDescription: "Climbing vegetable adapted for high-temperature zones where conventional leafy greens fail. The mucilaginous leaves contain high levels of vitamins A and C. Vigorous growth requires substantial vertical support infrastructure.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "High",
+        waterNeeds: "700-1000 ml per week",
+        temperature: "25-35°C (77-95°F)",
+        strengths: ["Heat-loving leafy green", "Vigorous climbing vine", "Nutrient-rich, edible leaves", "Tolerates humidity and heat"],
+        weaknesses: ["Requires strong trellis support", "Can become invasive", "Sensitive to cold", "Needs frequent harvesting"]
+    },
+    commonWormwood: {
+        name: "Common Wormwood (Artemisia absinthium)",
+        scifiName: "Artemisia Insect-Repellent - Silver-Leafed Deterrent",
+        scifiDescription: "Drought-resistant perennial containing absinthin and other bitter compounds that repel most herbivores and insects. The silvery foliage reflects excess solar radiation. Allelopathic properties inhibit nearby plant growth through root exudates.",
+        sunlight: "Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "300-500 ml per week",
+        temperature: "15-30°C (59-86°F)",
+        strengths: ["Drought-tolerant perennial", "Natural insect repellent", "Medicinal digestive properties", "Silver-gray ornamental foliage"],
+        weaknesses: ["Toxic in large quantities", "Can inhibit growth of nearby plants", "Requires well-drained soil", "Invasive in some regions"]
+    },
+    balloonVine: {
+        name: "Balloon Vine (Cardiospermum halicacabum)",
+        scifiName: "Cardiospermum Inflammatory-Reducer - Balloon Seed Disperser",
+        scifiDescription: "Fast-growing climber producing distinctive inflated seed capsules. Contains anti-inflammatory steroids used topically for joint pain. Self-seeding mechanism allows rapid colonization of available growing space.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "High",
+        waterNeeds: "500-700 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Fast-growing ornamental climber", "Anti-inflammatory medicinal uses", "Attracts beneficial insects", "Unique balloon-like seed pods"],
+        weaknesses: ["Can become weedy and invasive", "Self-seeds prolifically", "Needs trellis or support", "Short-lived annual in most climates"]
+    },
+    climbingBrinjal: {
+        name: "Climbing Brinjal (Solanum melongena)",
+        scifiName: "Solanum Vertical-Fruit - Space-Efficient Aubergine",
+        scifiDescription: "Vertically trained eggplant variant optimized for limited growing areas. Requires robust support but produces continuously throughout warm season. Purple flowers contain anthocyanin pigments with antioxidant properties.",
+        sunlight: "Full Sun",
+        sunResistant: "Moderate to High",
+        waterNeeds: "800-1200 ml per week",
+        temperature: "24-32°C (75-90°F)",
+        strengths: ["Space-saving vertical eggplant variety", "Productive fruit-bearing vine", "Ornamental purple flowers", "Continuous harvest"],
+        weaknesses: ["Requires sturdy support structure", "Susceptible to pests (aphids, fruit borers)", "Needs regular feeding", "Sensitive to cold temperatures"]
+    },
+    bryophyllum: {
+        name: "Bryophyllum (Kalanchoe pinnata)",
+        scifiName: "Kalanchoe Propagation-Unit - Self-Cloning Medicinal",
+        scifiDescription: "Succulent that produces plantlets along leaf margins enabling extreme reproductive efficiency. The leaves contain bufadienolide compounds with wound-healing and anti-inflammatory effects. Can become dominant species if not controlled.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Very High",
+        waterNeeds: "300-500 ml per week",
+        temperature: "15-35°C (59-95°F)",
+        strengths: ["Medicinal uses for wounds and inflammation", "Extremely easy propagation from leaf plantlets", "Drought-tolerant succulent", "Low maintenance"],
+        weaknesses: ["Invasive due to prolific reproduction", "Toxic to pets if ingested", "Overwatering causes rot", "Can dominate garden space"]
+    },
+    mexicanMint: {
+        name: "Mexican Mint (Plectranthus amboinicus)",
+        scifiName: "Plectranthus Respiratory-Herb - Aromatic Cough Suppressant",
+        scifiDescription: "Thick-leafed aromatic containing carvacrol and thymol compounds that soothe respiratory inflammation. Easy vegetative propagation through stem cuttings. The pungent leaves repel various insect pests from surrounding plants.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "500-700 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Aromatic culinary and medicinal herb", "Treats coughs and respiratory issues", "Easy propagation from cuttings", "Insect-repelling properties"],
+        weaknesses: ["Sensitive to frost", "Prone to mealybugs", "Requires regular pruning", "Can become leggy in low light"]
+    },
+    hibiscus: {
+        name: "Hibiscus (Hibiscus rosa-sinensis)",
+        scifiName: "Hibiscus Anthocyanin-Bloom - Floral Display Engine",
+        scifiDescription: "Ornamental shrub producing large flowers rich in anthocyanin pigments used for beverages and dyes. Each flower lasts only 24 hours but plants produce continuously. The petals contain acids that condition hair and reduce dandruff.",
+        sunlight: "Full Sun",
+        sunResistant: "High",
+        waterNeeds: "800-1200 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Beautiful ornamental flowers", "Flowers used for tea and natural dye", "Attracts butterflies and hummingbirds", "Hair care benefits"],
+        weaknesses: ["Requires regular watering and feeding", "Susceptible to aphids and whiteflies", "Sensitive to cold and frost", "Flowers last only one day"]
+    },
+    nilavembu: {
+        name: "Nilavembu (Andrographis paniculata)",
+        scifiName: "Andrographis Immunity-Booster - Fever-Breaking Bitter",
+        scifiDescription: "Annual herb containing andrographolide molecules with proven antiviral and immune-stimulating properties. Extremely bitter taste indicates high concentration of active compounds. Traditional fever management protocols use leaf extracts extensively.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "600-900 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Powerful immune-boosting herb", "Anti-viral and anti-malarial properties", "Used in fever management", "Fast-growing annual"],
+        weaknesses: ["Extremely bitter taste", "Requires consistent moisture", "Bolts quickly in heat", "Short harvest window"]
+    },
+    sweetFlag: {
+        name: "Sweet Flag (Acorus calamus)",
+        scifiName: "Acorus Aromatic-Rhizome - Aquatic Digestive Aid",
+        scifiDescription: "Wetland perennial with fragrant underground stems containing asarone compounds. Thrives in saturated soil conditions. The rhizomes improve digestive function and repel insects when dried and crushed.",
+        sunlight: "Partial Shade to Full Sun",
+        sunResistant: "Moderate",
+        waterNeeds: "1000-1500 ml per week",
+        temperature: "15-30°C (59-86°F)",
+        strengths: ["Aromatic rhizomes for digestive health", "Thrives in wet, waterlogged soil", "Insect-repelling properties", "Hardy perennial"],
+        weaknesses: ["Requires very high moisture", "Can be invasive near water", "Slow growth from rhizomes", "Not suitable for dry conditions"]
+    },
+    butterflyPea: {
+        name: "Butterfly Pea (Clitoria ternatea)",
+        scifiName: "Clitoria Nitrogen-Fixer - Blue Anthocyanin Legume",
+        scifiDescription: "Climbing legume that hosts nitrogen-fixing bacteria in root nodules while producing vivid blue flowers. The petals contain pH-sensitive anthocyanins used as natural indicators and beverage colorants. Improves soil fertility for subsequent crops.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "High",
+        waterNeeds: "600-900 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Stunning blue flowers for tea and natural dye", "Nitrogen-fixing legume improves soil", "Antioxidant-rich health benefits", "Attracts pollinators"],
+        weaknesses: ["Requires trellis support", "Can become invasive", "Sensitive to frost", "May need frequent harvesting"]
+    },
+    madagascarPeriwinkle: {
+        name: "Madagascar Periwinkle (Catharanthus roseus)",
+        scifiName: "Catharanthus Alkaloid-Factory - Continuous Bloom Chemist",
+        scifiDescription: "Ornamental containing over 130 alkaloids including vinblastine and vincristine used in chemotherapy protocols. Flowers continuously in warm conditions with minimal water. All parts contain toxic compounds requiring careful handling.",
+        sunlight: "Full Sun to Partial Shade",
+        sunResistant: "Very High",
+        waterNeeds: "400-600 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Continuous flowering ornamental", "Medicinal alkaloids for cancer treatment", "Extremely heat and drought tolerant", "Low maintenance"],
+        weaknesses: ["All parts toxic if ingested", "Sensitive to overwatering", "Prone to leaf spot diseases", "Can become invasive in tropical areas"]
+    },
+    lemonGrass: {
+        name: "Lemon Grass (Cymbopogon citratus)",
+        scifiName: "Cymbopogon Citral-Producer - Mosquito Deterrent Grass",
+        scifiDescription: "Perennial grass synthesizing high concentrations of citral and geraniol for natural insect repellency. The aromatic leaves flavour cuisines while the essential oils have antimicrobial properties. Forms dense clumps requiring periodic division.",
+        sunlight: "Full Sun",
+        sunResistant: "Very High",
+        waterNeeds: "700-1000 ml per week",
+        temperature: "20-35°C (68-95°F)",
+        strengths: ["Aromatic culinary and medicinal grass", "Natural mosquito repellent", "Drought-tolerant once established", "Easy propagation from division"],
+        weaknesses: ["Requires space to spread", "Sharp leaf edges can cut skin", "Sensitive to frost", "Needs regular division to maintain vigor"]
+    }
+};
+
+function showPlantInfo(plantId) {
+    const plant = plantData[plantId];
+    const modal = document.getElementById('plantModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    modalTitle.textContent = plant.name;
+
+    modalBody.innerHTML = `
+        <div class="scifi-section">
+            <h3>Scientific Classification</h3>
+            <div class="scifi-name">Designation: ${plant.scifiName}</div>
+            <div class="scifi-description">${plant.scifiDescription}</div>
+        </div>
+
+        <div class="info-section">
+            <h3>Growing Requirements</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">☀️ Sunlight</div>
+                    <div class="info-value">${plant.sunlight}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🌡️ Sun Resistance</div>
+                    <div class="info-value">${plant.sunResistant}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">💧 Water Needs</div>
+                    <div class="info-value">${plant.waterNeeds}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🌡️ Temperature Range</div>
+                    <div class="info-value">${plant.temperature}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="strengths">
+            <h4>✅ Strengths</h4>
+            <ul>
+                ${plant.strengths.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="weaknesses">
+            <h4>⚠️ Weaknesses & Care Tips</h4>
+            <ul>
+                ${plant.weaknesses.map(w => `<li>${w}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+
+    modal.style.display = 'block';
+}
+
+function closeModal() {
+    const modal = document.getElementById('plantModal');
+    modal.style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('plantModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+</script>
+
+</body>
+</html>
