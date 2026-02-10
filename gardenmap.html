@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Garden Map</title>
+<title>PTU Botanical Garden Map</title>
 <style>
     * {
         margin: 0;
@@ -11,204 +11,205 @@
     }
 
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #f4f2ea 0%, #e8e5d5 100%);
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        background: linear-gradient(135deg, #f5f7f5 0%, #e8ede8 100%);
         padding: 40px 20px;
         min-height: 100vh;
+        color: #2a2a2a;
+    }
+
+    .header-section {
+        max-width: 1200px;
+        margin: 0 auto 30px;
+        text-align: center;
+    }
+
+    .logo-container {
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .logo-container img {
+        height: 120px;
+        width: auto;
     }
 
     h1 {
-        text-align: center;
-        color: #2e663a;
-        margin-bottom: 40px;
-        font-size: 2.5em;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        color: #1e4d2b;
+        font-size: 2.2em;
+        font-weight: 300;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        color: #5a7a5a;
+        font-size: 1.1em;
+        font-weight: 300;
+        letter-spacing: 0.5px;
     }
 
     .garden-container {
         max-width: 1200px;
         margin: 0 auto;
+        background: white;
+        padding: 50px 40px;
+        border-radius: 2px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .row {
         display: flex;
         justify-content: center;
-        gap: 60px;
-        margin: 22px 0;
+        gap: 70px;
+        margin: 28px 0;
     }
 
     .item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 140px;
+        width: 150px;
         cursor: pointer;
-        transition: transform 0.3s ease;
+        transition: all 0.25s ease;
         position: relative;
     }
 
     .item:hover {
-        transform: translateY(-5px);
+        transform: translateY(-3px);
     }
 
     .empty {
-        width: 140px;
+        width: 150px;
     }
 
-    .dot {
-        width: 14px;
-        height: 14px;
-        background: #2e663a;
-        border-radius: 50%;
-        margin-bottom: 6px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    .plant-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        position: relative;
+        transition: all 0.25s ease;
     }
 
-    .item:hover .dot {
-        background: #4a9d5f;
-        transform: scale(1.5);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    .plant-icon svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 2px 4px rgba(46, 102, 58, 0.15));
+    }
+
+    .item:hover .plant-icon svg {
+        filter: drop-shadow(0 4px 8px rgba(46, 102, 58, 0.25));
+        transform: scale(1.1);
     }
 
     .label {
-        font-size: 16px;
-        font-weight: 500;
-        color: #333;
+        font-size: 14px;
+        font-weight: 400;
+        color: #4a4a4a;
         text-align: center;
-        transition: color 0.3s ease;
+        transition: all 0.25s ease;
+        line-height: 1.4;
     }
 
     .item:hover .label {
         color: #2e663a;
-        font-weight: 600;
+        font-weight: 500;
     }
 
-    /* Gate Styles */
+    /* Gate section with species */
     .gate-container {
         margin-top: 60px;
+        padding: 50px 0;
+        border-top: 2px solid #e5e5e5;
         display: flex;
-        justify-content: center;
-        padding: 40px 0;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .gate {
-        position: relative;
-        width: 300px;
-        height: 350px;
-        perspective: 1000px;
+    .gate-label-top {
+        font-size: 18px;
+        font-weight: 400;
+        color: #1e4d2b;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+    }
+
+    .species-gate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 80px;
+        margin-bottom: 30px;
+    }
+
+    .species-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .species-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .species-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #f4f9f4 0%, #ffffff 100%);
+        border: 2px solid #d4d4d0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .species-item:hover .species-icon {
+        box-shadow: 0 6px 20px rgba(46, 102, 58, 0.2);
+        border-color: #2e663a;
+    }
+
+    .species-icon svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .species-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #2e663a;
+        text-align: center;
     }
 
     .gate-arch {
         width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #3d2817 0%, #5a3f2a 50%, #3d2817 100%);
-        border-radius: 150px 150px 0 0;
-        border: 8px solid #2e1f14;
+        max-width: 600px;
+        height: 4px;
+        background: linear-gradient(90deg, transparent 0%, #2e663a 20%, #2e663a 80%, transparent 100%);
+        border-radius: 2px;
         position: relative;
-        box-shadow: 
-            inset 0 10px 20px rgba(0,0,0,0.5),
-            0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .gate-arch::before,
+    .gate-arch::after {
+        content: '';
+        position: absolute;
+        width: 3px;
+        height: 40px;
+        background: #2e663a;
+        bottom: 0;
     }
 
     .gate-arch::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70%;
-        height: 80%;
-        background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-        border-radius: 100px 100px 0 0;
-        border: 3px solid #5a3f2a;
+        left: 20%;
     }
 
-    .gate-doors {
-        position: absolute;
-        top: 52%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 65%;
-        height: 75%;
-        display: flex;
-        gap: 4px;
-    }
-
-    .gate-door {
-        flex: 1;
-        background: linear-gradient(90deg, #2a1810 0%, #3d2817 50%, #2a1810 100%);
-        border: 2px solid #5a3f2a;
-        border-radius: 0 0 5px 5px;
-        position: relative;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    .gate-door::before {
-        content: '';
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-        border: 1px solid rgba(90, 63, 42, 0.5);
-        border-radius: 3px;
-    }
-
-    .gate-handle {
-        position: absolute;
-        top: 50%;
-        width: 12px;
-        height: 25px;
-        background: linear-gradient(180deg, #8b7355 0%, #5a4a3a 100%);
-        border-radius: 3px;
-        transform: translateY(-50%);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
-
-    .gate-door:first-child .gate-handle {
-        right: 5px;
-    }
-
-    .gate-door:last-child .gate-handle {
-        left: 5px;
-    }
-
-    .gate-base {
-        position: absolute;
-        bottom: -20px;
-        left: -20px;
-        right: -20px;
-        height: 25px;
-        background: linear-gradient(180deg, #4a3829 0%, #3d2817 100%);
-        border: 3px solid #2e1f14;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    }
-
-    .gate-vines {
-        position: absolute;
-        top: -10px;
-        left: 0;
-        right: 0;
-        height: 40px;
-        background-image: 
-            radial-gradient(circle at 20% 50%, #2e663a 2px, transparent 2px),
-            radial-gradient(circle at 40% 30%, #4a9d5f 3px, transparent 3px),
-            radial-gradient(circle at 60% 60%, #2e663a 2px, transparent 2px),
-            radial-gradient(circle at 80% 40%, #4a9d5f 2px, transparent 2px);
-        background-size: 20px 20px;
-        opacity: 0.7;
-    }
-
-    .gate-label {
-        text-align: center;
-        margin-top: 25px;
-        font-size: 24px;
-        font-weight: 600;
-        color: #3d2817;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        letter-spacing: 2px;
+    .gate-arch::after {
+        right: 20%;
     }
 
     /* Modal Styles */
@@ -220,8 +221,8 @@
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0,0,0,0.6);
-        animation: fadeIn 0.3s ease;
+        background-color: rgba(0,0,0,0.5);
+        animation: fadeIn 0.2s ease;
         overflow-y: auto;
     }
 
@@ -231,20 +232,20 @@
     }
 
     .modal-content {
-        background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
-        margin: 5% auto;
+        background: white;
+        margin: 4% auto;
         padding: 0;
-        border-radius: 15px;
+        border-radius: 1px;
         width: 90%;
-        max-width: 700px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        animation: slideDown 0.3s ease;
+        max-width: 750px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        animation: slideDown 0.25s ease;
         overflow: hidden;
     }
 
     @keyframes slideDown {
         from {
-            transform: translateY(-50px);
+            transform: translateY(-30px);
             opacity: 0;
         }
         to {
@@ -254,99 +255,107 @@
     }
 
     .modal-header {
-        background: linear-gradient(135deg, #2e663a 0%, #4a9d5f 100%);
+        background: #2e663a;
         color: white;
-        padding: 25px 30px;
+        padding: 30px 40px;
         position: relative;
     }
 
     .modal-header h2 {
         margin: 0;
-        font-size: 28px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        font-size: 26px;
+        font-weight: 400;
+        letter-spacing: 0.3px;
     }
 
     .close {
         position: absolute;
-        right: 20px;
-        top: 20px;
+        right: 25px;
+        top: 25px;
         color: white;
-        font-size: 35px;
-        font-weight: bold;
+        font-size: 32px;
+        font-weight: 300;
         cursor: pointer;
-        transition: transform 0.2s ease;
+        transition: opacity 0.2s ease;
         line-height: 1;
+        opacity: 0.9;
     }
 
     .close:hover {
-        transform: scale(1.2);
+        opacity: 1;
     }
 
     .modal-body {
-        padding: 30px;
+        padding: 40px;
     }
 
     .info-section {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
     }
 
     .info-section h3 {
         color: #2e663a;
-        font-size: 18px;
-        margin-bottom: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 16px;
         display: flex;
         align-items: center;
         gap: 10px;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
     }
 
     .info-section h3::before {
-        content: '🌿';
-        font-size: 20px;
+        content: '';
+        width: 4px;
+        height: 16px;
+        background: #2e663a;
+        border-radius: 2px;
     }
 
     .scifi-section {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 2px solid #0f3460;
+        padding: 25px;
+        border-radius: 1px;
+        margin-bottom: 25px;
     }
 
     .scifi-section h3 {
         color: #00fff5 !important;
-        text-shadow: 0 0 10px #00fff5;
+        text-shadow: 0 0 10px rgba(0, 255, 245, 0.3);
     }
 
     .scifi-section h3::before {
-        content: '🔬';
+        background: #00fff5 !important;
     }
 
     .scifi-name {
         color: #00fff5;
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 15px;
+        margin-bottom: 12px;
+        letter-spacing: 0.3px;
     }
 
     .scifi-description {
-        color: #e0e0e0;
-        font-size: 15px;
-        line-height: 1.8;
+        color: #e8e8e8;
+        font-size: 14px;
+        line-height: 1.7;
         font-style: italic;
-        padding: 10px;
-        background: rgba(0, 255, 245, 0.1);
-        border-left: 3px solid #00fff5;
-        border-radius: 5px;
+        padding: 15px;
+        background: rgba(0, 255, 245, 0.08);
+        border-left: 2px solid #00fff5;
+        border-radius: 1px;
     }
 
     .info-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        background: #f4f9f4;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 4px solid #2e663a;
+        gap: 20px;
+        background: #f9faf8;
+        padding: 25px;
+        border-radius: 1px;
+        border: 1px solid #e8e8e5;
     }
 
     .info-item {
@@ -355,44 +364,51 @@
     }
 
     .info-label {
-        font-weight: 600;
+        font-weight: 500;
         color: #2e663a;
-        font-size: 14px;
-        margin-bottom: 5px;
+        font-size: 13px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .info-value {
         color: #555;
         font-size: 15px;
+        line-height: 1.5;
     }
 
     .strengths, .weaknesses {
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 15px;
+        padding: 20px;
+        border-radius: 1px;
+        margin-bottom: 18px;
+        border: 1px solid;
     }
 
     .strengths {
-        background: #e8f5e9;
-        border-left: 4px solid #4caf50;
+        background: #f4f9f4;
+        border-color: #d4e7d4;
     }
 
     .weaknesses {
-        background: #fff3e0;
-        border-left: 4px solid #ff9800;
+        background: #fff9f0;
+        border-color: #ffe4c4;
     }
 
     .strengths h4, .weaknesses h4 {
-        margin-bottom: 10px;
-        font-size: 16px;
+        margin-bottom: 12px;
+        font-size: 15px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .strengths h4 {
-        color: #2e7d32;
+        color: #2e663a;
     }
 
     .weaknesses h4 {
-        color: #e65100;
+        color: #c87600;
     }
 
     .strengths ul, .weaknesses ul {
@@ -401,20 +417,27 @@
     }
 
     .strengths li, .weaknesses li {
-        margin: 5px 0;
+        margin: 8px 0;
+        line-height: 1.5;
+        font-size: 14px;
     }
 
     @media (max-width: 768px) {
         .row {
-            gap: 30px;
+            gap: 40px;
         }
         
         .item {
-            width: 100px;
+            width: 110px;
         }
 
         .label {
-            font-size: 13px;
+            font-size: 12px;
+        }
+
+        .plant-icon {
+            width: 40px;
+            height: 40px;
         }
 
         .info-grid {
@@ -423,92 +446,233 @@
 
         .modal-content {
             width: 95%;
-            margin: 10% auto;
+            margin: 8% auto;
         }
 
-        .gate {
-            width: 200px;
-            height: 250px;
+        .modal-body {
+            padding: 30px 25px;
+        }
+
+        .garden-container {
+            padding: 40px 25px;
+        }
+
+        .species-gate {
+            gap: 40px;
+        }
+
+        .species-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .species-icon svg {
+            width: 35px;
+            height: 35px;
         }
     }
 </style>
 </head>
 <body>
 
-<h1>🌱 Garden Map 🌱</h1>
+<div class="header-section">
+    <div class="logo-container">
+        <img src="/mnt/user-data/uploads/nwc.jpeg" alt="NWC PTU Logo">
+    </div>
+    <h1>PTU Botanical Garden</h1>
+    <div class="subtitle">Nature and Wildlife Club Collection</div>
+</div>
 
 <div class="garden-container">
-    <!-- ========== 4 DOT ROWS ========== -->
+    <!-- ========== 4 PLANT ROWS ========== -->
     <div class="row">
         <div class="item" onclick="showPlantInfo('yellowChard')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 6C24 6 18 12 18 20C18 24 20 28 24 28C28 28 30 24 30 20C30 12 24 6 24 6Z" fill="#4a9d5f"/>
+                    <path d="M24 28V42" stroke="#5a7a5a" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M22 18C22 18 19 20 19 24" stroke="#2e663a" stroke-width="1.5" stroke-opacity="0.6"/>
+                    <path d="M26 18C26 18 29 20 29 24" stroke="#2e663a" stroke-width="1.5" stroke-opacity="0.6"/>
+                </svg>
+            </div>
             <div class="label">Yellow Chard</div>
         </div>
         <div class="item" onclick="showPlantInfo('mouseMelon')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="8" fill="#6db87f"/>
+                    <path d="M24 16C24 16 22 10 22 8C22 6 24 6 24 6C24 6 26 6 26 8C26 10 24 16 24 16Z" fill="#4a9d5f"/>
+                    <path d="M20 22L14 20C12 19 12 21 13 22L20 22Z" fill="#4a9d5f"/>
+                    <path d="M28 22L34 20C36 19 36 21 35 22L28 22Z" fill="#4a9d5f"/>
+                </svg>
+            </div>
             <div class="label">Mouse Melon</div>
         </div>
         <div class="item" onclick="showPlantInfo('longPepper')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 8C24 8 20 14 20 22C20 26 22 30 24 32V42" stroke="#5a7a5a" stroke-width="2"/>
+                    <ellipse cx="24" cy="18" rx="4" ry="8" fill="#4a9d5f"/>
+                    <path d="M24 12C26 12 28 14 28 18L24 12Z" fill="#3d8a54" opacity="0.7"/>
+                </svg>
+            </div>
             <div class="label">Long Pepper</div>
         </div>
         <div class="item" onclick="showPlantInfo('gurmar')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 18 32 18 24C18 18 21 12 24 8C27 12 30 18 30 24C30 32 24 38 24 38Z" fill="#4a9d5f"/>
+                    <circle cx="24" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="21" cy="26" r="2" fill="#6db87f"/>
+                    <circle cx="27" cy="26" r="2" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Gurmar</div>
         </div>
     </div>
 
     <div class="row">
         <div class="item" onclick="showPlantInfo('youngBasil')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 42V28" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M18 20C18 20 16 16 16 12C16 10 18 8 20 8C22 8 24 10 24 12" fill="#4a9d5f"/>
+                    <path d="M30 20C30 20 32 16 32 12C32 10 30 8 28 8C26 8 24 10 24 12" fill="#4a9d5f"/>
+                    <path d="M24 12C24 12 24 16 24 20C24 24 24 28 24 28" stroke="#3d8a54" stroke-width="2"/>
+                    <circle cx="20" cy="22" r="2.5" fill="#6db87f"/>
+                    <circle cx="28" cy="22" r="2.5" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Young Basil</div>
         </div>
         <div class="item" onclick="showPlantInfo('veldGrape')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 10L24 38" stroke="#5a7a5a" stroke-width="3"/>
+                    <rect x="22" y="16" width="4" height="6" fill="#6db87f" rx="1"/>
+                    <rect x="22" y="24" width="4" height="6" fill="#6db87f" rx="1"/>
+                    <rect x="22" y="32" width="4" height="4" fill="#6db87f" rx="1"/>
+                </svg>
+            </div>
             <div class="label">Veld Grape</div>
         </div>
         <div class="item" onclick="showPlantInfo('vetiverGrass')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 36C18 36 18 20 18 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M22 36C22 36 22 18 22 10" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M26 36C26 36 26 18 26 10" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M30 36C30 36 30 20 30 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M16 38L32 38" stroke="#5a7a5a" stroke-width="2"/>
+                </svg>
+            </div>
             <div class="label">Vetiver Grass</div>
         </div>
         <div class="item" onclick="showPlantInfo('babelGrass')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 36C20 36 20 22 20 14" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M24 38C24 38 24 20 24 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M28 36C28 36 28 22 28 14" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <ellipse cx="24" cy="10" rx="6" ry="4" fill="#6db87f" opacity="0.7"/>
+                </svg>
+            </div>
             <div class="label">Babel Grass</div>
         </div>
     </div>
 
     <div class="row">
         <div class="item" onclick="showPlantInfo('frogFruit')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="12" fill="#4a9d5f" opacity="0.3"/>
+                    <circle cx="20" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="28" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="24" cy="26" r="3" fill="#6db87f"/>
+                    <circle cx="18" cy="26" r="2" fill="#6db87f"/>
+                    <circle cx="30" cy="26" r="2" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Frog Fruit</div>
         </div>
         <div class="item" onclick="showPlantInfo('aloeVera')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 20 32 18 24C17 20 18 12 24 8C30 12 31 20 30 24C28 32 24 38 24 38Z" fill="#6db87f"/>
+                    <path d="M24 8C24 8 21 14 20 20" stroke="#5a9d70" stroke-width="1"/>
+                    <path d="M24 8C24 8 27 14 28 20" stroke="#5a9d70" stroke-width="1"/>
+                    <ellipse cx="22" cy="18" rx="1" ry="2" fill="white" opacity="0.5"/>
+                    <ellipse cx="26" cy="18" rx="1" ry="2" fill="white" opacity="0.5"/>
+                </svg>
+            </div>
             <div class="label">Aloe Vera</div>
         </div>
         <div class="item" onclick="showPlantInfo('hennaPlant')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V20" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="20" cy="14" r="3" fill="#6db87f"/>
+                    <circle cx="28" cy="14" r="3" fill="#6db87f"/>
+                    <circle cx="24" cy="10" r="3" fill="#6db87f"/>
+                    <circle cx="16" cy="18" r="2" fill="#6db87f"/>
+                    <circle cx="32" cy="18" r="2" fill="#6db87f"/>
+                    <path d="M18 24L24 20L30 24" stroke="#4a9d5f" stroke-width="1.5" fill="none"/>
+                </svg>
+            </div>
             <div class="label">Henna Plant</div>
         </div>
         <div class="item" onclick="showPlantInfo('cardamom')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40V22" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M20 12C20 12 18 16 18 20C18 22 20 24 22 24" fill="none" stroke="#4a9d5f" stroke-width="2"/>
+                    <path d="M28 12C28 12 30 16 30 20C30 22 28 24 26 24" fill="none" stroke="#4a9d5f" stroke-width="2"/>
+                    <ellipse cx="20" cy="18" rx="2" ry="4" fill="#6db87f"/>
+                    <ellipse cx="28" cy="18" rx="2" ry="4" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Cardamom</div>
         </div>
     </div>
 
-    <!-- ========== CENTERED 3 DOT ROWS ========== -->
+    <!-- ========== CENTERED 3 PLANT ROWS ========== -->
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('nightDarkShade')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V24" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="24" cy="18" r="6" fill="#4a9d5f"/>
+                    <circle cx="20" cy="16" r="2" fill="#3d8a54"/>
+                    <circle cx="28" cy="16" r="2" fill="#3d8a54"/>
+                    <circle cx="24" cy="20" r="2" fill="#3d8a54"/>
+                    <path d="M18 22C18 22 20 20 24 20C28 20 30 22 30 22" stroke="#2e663a" stroke-width="1"/>
+                </svg>
+            </div>
             <div class="label">Night Dark Shade</div>
         </div>
         <div class="item" onclick="showPlantInfo('commonPurslane')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="10" fill="#4a9d5f" opacity="0.4"/>
+                    <circle cx="24" cy="24" r="4" fill="#6db87f"/>
+                    <circle cx="18" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="30" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="20" cy="28" r="3" fill="#6db87f"/>
+                    <circle cx="28" cy="28" r="3" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Common Purslane</div>
         </div>
         <div class="item" onclick="showPlantInfo('snakeAloe')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40C24 40 20 36 18 28C17 22 18 14 24 10C30 14 31 22 30 28C28 36 24 40 24 40Z" fill="#4a9d5f"/>
+                    <path d="M24 10L24 18" stroke="#3d8a54" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M24 20L24 28" stroke="#3d8a54" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M24 30L24 36" stroke="#3d8a54" stroke-width="1.5" opacity="0.6"/>
+                </svg>
+            </div>
             <div class="label">Snake Aloe / Dracaena</div>
         </div>
     </div>
@@ -516,15 +680,39 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('basil')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M18 18C18 18 16 14 16 10C16 8 18 6 20 6C22 6 24 8 24 10" fill="#4a9d5f"/>
+                    <path d="M30 18C30 18 32 14 32 10C32 8 30 6 28 6C26 6 24 8 24 10" fill="#4a9d5f"/>
+                    <path d="M24 10C24 10 24 14 24 18C24 22 24 26 24 26" stroke="#3d8a54" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="28" cy="20" r="3" fill="#6db87f"/>
+                    <circle cx="24" cy="24" r="2" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Basil</div>
         </div>
         <div class="item" onclick="showPlantInfo('indianRedGinger')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V28" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M20 14C20 14 18 18 18 22L20 26L24 24L28 26L30 22C30 18 28 14 28 14" fill="#6db87f"/>
+                    <circle cx="24" cy="12" r="4" fill="#d46a6a" opacity="0.8"/>
+                    <path d="M22 18L26 18" stroke="#4a9d5f" stroke-width="1.5"/>
+                </svg>
+            </div>
             <div class="label">Indian Red Ginger</div>
         </div>
         <div class="item" onclick="showPlantInfo('turmeric')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 36V24" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M20 12C20 12 18 16 18 20L20 24L24 22L28 24L30 20C30 16 28 12 28 12" fill="#6db87f"/>
+                    <ellipse cx="24" cy="10" rx="5" ry="3" fill="#e8a54a" opacity="0.7"/>
+                    <path d="M22 16L26 16" stroke="#4a9d5f" stroke-width="1.5"/>
+                </svg>
+            </div>
             <div class="label">Turmeric</div>
         </div>
     </div>
@@ -532,15 +720,42 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('starGooseberry')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="24" cy="18" r="8" fill="#4a9d5f" opacity="0.3"/>
+                    <path d="M24 12L25 16L29 16L26 19L27 23L24 20L21 23L22 19L19 16L23 16Z" fill="#6db87f"/>
+                    <circle cx="20" cy="24" r="2" fill="#8bc98b"/>
+                    <circle cx="28" cy="24" r="2" fill="#8bc98b"/>
+                </svg>
+            </div>
             <div class="label">Star Gooseberry</div>
         </div>
         <div class="item" onclick="showPlantInfo('kesavarthini')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="22" r="10" fill="#4a9d5f" opacity="0.3"/>
+                    <circle cx="24" cy="22" r="5" fill="#6db87f"/>
+                    <circle cx="20" cy="18" r="2" fill="#8bc98b"/>
+                    <circle cx="28" cy="18" r="2" fill="#8bc98b"/>
+                    <circle cx="24" cy="26" r="2" fill="#8bc98b"/>
+                    <path d="M24 32V38" stroke="#5a7a5a" stroke-width="2"/>
+                </svg>
+            </div>
             <div class="label">Kesavarthini</div>
         </div>
         <div class="item" onclick="showPlantInfo('holyBasil')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M18 16C18 16 16 12 16 8C16 6 18 4 20 4C22 4 24 6 24 8" fill="#4a9d5f"/>
+                    <path d="M30 16C30 16 32 12 32 8C32 6 30 4 28 4C26 4 24 6 24 8" fill="#4a9d5f"/>
+                    <circle cx="20" cy="18" r="3.5" fill="#6db87f"/>
+                    <circle cx="28" cy="18" r="3.5" fill="#6db87f"/>
+                    <circle cx="24" cy="22" r="3" fill="#6db87f"/>
+                    <path d="M24 8C24 8 24 14 24 18" stroke="#3d8a54" stroke-width="2"/>
+                </svg>
+            </div>
             <div class="label">Holy Basil</div>
         </div>
     </div>
@@ -548,15 +763,40 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('greenMalabarSpinach')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 20 34 18 28C16 22 18 16 22 12C20 16 20 20 22 24C24 28 24 32 24 38Z" fill="#4a9d5f"/>
+                    <path d="M24 38C24 38 28 34 30 28C32 22 30 16 26 12C28 16 28 20 26 24C24 28 24 32 24 38Z" fill="#4a9d5f"/>
+                    <circle cx="22" cy="20" r="2" fill="#6db87f"/>
+                    <circle cx="26" cy="20" r="2" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Green Malabar Spinach</div>
         </div>
         <div class="item" onclick="showPlantInfo('commonWormwood')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V20" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M18 14C18 14 16 10 18 8C19 7 21 8 21 10" fill="none" stroke="#6db87f" stroke-width="1.5"/>
+                    <path d="M24 12C24 12 24 8 24 6C24 5 26 5 26 6C26 8 26 12 26 12" fill="none" stroke="#6db87f" stroke-width="1.5"/>
+                    <path d="M30 14C30 14 32 10 30 8C29 7 27 8 27 10" fill="none" stroke="#6db87f" stroke-width="1.5"/>
+                    <circle cx="20" cy="16" r="2" fill="#a8b8a8" opacity="0.7"/>
+                    <circle cx="24" cy="14" r="2" fill="#a8b8a8" opacity="0.7"/>
+                    <circle cx="28" cy="16" r="2" fill="#a8b8a8" opacity="0.7"/>
+                </svg>
+            </div>
             <div class="label">Common Wormwood</div>
         </div>
         <div class="item" onclick="showPlantInfo('balloonVine')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 20 32 20 26C20 22 22 18 24 14C26 18 28 22 28 26C28 32 24 38 24 38Z" stroke="#4a9d5f" stroke-width="2" fill="none"/>
+                    <ellipse cx="24" cy="18" rx="5" ry="7" fill="#6db87f" opacity="0.4"/>
+                    <circle cx="22" cy="16" r="1.5" fill="#8bc98b"/>
+                    <circle cx="26" cy="16" r="1.5" fill="#8bc98b"/>
+                    <circle cx="24" cy="20" r="1.5" fill="#8bc98b"/>
+                </svg>
+            </div>
             <div class="label">Balloon Vine</div>
         </div>
     </div>
@@ -564,15 +804,40 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('climbingBrinjal')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40C24 40 20 36 18 30C16 24 18 18 22 14C20 18 20 24 22 28C24 32 24 36 24 40Z" fill="#4a9d5f"/>
+                    <ellipse cx="22" cy="22" rx="4" ry="6" fill="#7a5ba8" opacity="0.6"/>
+                    <path d="M22 16C22 16 20 18 20 20" stroke="#4a9d5f" stroke-width="1"/>
+                    <circle cx="22" cy="20" r="2" fill="#9575cd" opacity="0.4"/>
+                </svg>
+            </div>
             <div class="label">Climbing Brinjal</div>
         </div>
         <div class="item" onclick="showPlantInfo('bryophyllum')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 20 34 18 28C17 24 18 18 24 14C30 18 31 24 30 28C28 34 24 38 24 38Z" fill="#6db87f"/>
+                    <circle cx="20" cy="22" r="1.5" fill="#8bc98b"/>
+                    <circle cx="24" cy="20" r="1.5" fill="#8bc98b"/>
+                    <circle cx="28" cy="22" r="1.5" fill="#8bc98b"/>
+                    <circle cx="22" cy="26" r="1.5" fill="#8bc98b"/>
+                    <circle cx="26" cy="26" r="1.5" fill="#8bc98b"/>
+                </svg>
+            </div>
             <div class="label">Bryophyllum</div>
         </div>
         <div class="item" onclick="showPlantInfo('mexicanMint')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="20" cy="16" r="4" fill="#6db87f"/>
+                    <circle cx="28" cy="16" r="4" fill="#6db87f"/>
+                    <circle cx="24" cy="21" r="4" fill="#6db87f"/>
+                    <circle cx="18" cy="22" r="3" fill="#8bc98b"/>
+                    <circle cx="30" cy="22" r="3" fill="#8bc98b"/>
+                </svg>
+            </div>
             <div class="label">Mexican Mint</div>
         </div>
     </div>
@@ -580,15 +845,42 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('hibiscus')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 36V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="24" cy="18" r="8" fill="#d46a6a" opacity="0.5"/>
+                    <circle cx="24" cy="18" r="4" fill="#c85a5a" opacity="0.7"/>
+                    <circle cx="20" cy="16" r="2" fill="#d87878"/>
+                    <circle cx="28" cy="16" r="2" fill="#d87878"/>
+                    <circle cx="24" cy="14" r="2" fill="#d87878"/>
+                    <circle cx="24" cy="20" r="2" fill="#d87878"/>
+                </svg>
+            </div>
             <div class="label">Hibiscus</div>
         </div>
         <div class="item" onclick="showPlantInfo('nilavembu')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38V24" stroke="#5a7a5a" stroke-width="2"/>
+                    <path d="M18 14C18 14 16 10 18 8C20 6 22 8 22 10" fill="none" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M30 14C30 14 32 10 30 8C28 6 26 8 26 10" fill="none" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <ellipse cx="20" cy="16" rx="2" ry="4" fill="#6db87f"/>
+                    <ellipse cx="28" cy="16" rx="2" ry="4" fill="#6db87f"/>
+                    <circle cx="24" cy="20" r="3" fill="#6db87f"/>
+                </svg>
+            </div>
             <div class="label">Nilavembu</div>
         </div>
         <div class="item" onclick="showPlantInfo('sweetFlag')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 36C20 36 20 24 20 14" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M24 38C24 38 24 22 24 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M28 36C28 36 28 24 28 14" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M18 38L30 38" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="24" cy="10" r="3" fill="#8bc98b" opacity="0.6"/>
+                </svg>
+            </div>
             <div class="label">Sweet Flag</div>
         </div>
     </div>
@@ -596,37 +888,104 @@
     <div class="row">
         <div class="empty"></div>
         <div class="item" onclick="showPlantInfo('butterflyPea')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 38C24 38 20 32 20 26C20 22 22 18 24 14C26 18 28 22 28 26C28 32 24 38 24 38Z" stroke="#4a9d5f" stroke-width="2" fill="none"/>
+                    <ellipse cx="20" cy="18" rx="3" ry="5" fill="#5a7ac7" opacity="0.6"/>
+                    <ellipse cx="28" cy="18" rx="3" ry="5" fill="#5a7ac7" opacity="0.6"/>
+                    <circle cx="24" cy="16" r="2" fill="#7a9ae7"/>
+                </svg>
+            </div>
             <div class="label">Butterfly Pea</div>
         </div>
         <div class="item" onclick="showPlantInfo('madagascarPeriwinkle')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 36V26" stroke="#5a7a5a" stroke-width="2"/>
+                    <circle cx="24" cy="18" r="7" fill="#d47ac7" opacity="0.4"/>
+                    <circle cx="24" cy="18" r="3" fill="#c76ab7" opacity="0.6"/>
+                    <circle cx="20" cy="16" r="1.5" fill="#e89ad7"/>
+                    <circle cx="28" cy="16" r="1.5" fill="#e89ad7"/>
+                    <circle cx="24" cy="14" r="1.5" fill="#e89ad7"/>
+                    <circle cx="24" cy="20" r="1.5" fill="#e89ad7"/>
+                    <circle cx="22" cy="18" r="1.5" fill="#e89ad7"/>
+                    <circle cx="26" cy="18" r="1.5" fill="#e89ad7"/>
+                </svg>
+            </div>
             <div class="label">Madagascar Periwinkle</div>
         </div>
         <div class="item" onclick="showPlantInfo('lemonGrass')">
-            <div class="dot"></div>
+            <div class="plant-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 36C18 36 18 22 18 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M22 38C22 38 22 20 22 10" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M26 38C26 38 26 20 26 10" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M30 36C30 36 30 22 30 12" stroke="#4a9d5f" stroke-width="1.5"/>
+                    <path d="M16 38L32 38" stroke="#5a7a5a" stroke-width="2.5"/>
+                    <ellipse cx="24" cy="9" rx="7" ry="3" fill="#a8c9a8" opacity="0.5"/>
+                </svg>
+            </div>
             <div class="label">Lemon Grass</div>
         </div>
     </div>
 </div>
 
-<!-- Garden Gate -->
+<!-- Garden Gate with Species -->
 <div class="gate-container">
-    <div class="gate">
-        <div class="gate-vines"></div>
-        <div class="gate-arch">
-            <div class="gate-doors">
-                <div class="gate-door">
-                    <div class="gate-handle"></div>
-                </div>
-                <div class="gate-door">
-                    <div class="gate-handle"></div>
-                </div>
+    <div class="gate-label-top">Garden Entrance</div>
+    
+    <div class="species-gate">
+        <!-- insect -->
+        <div class="species-item">
+            <div class="species-icon">
+                <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="30" cy="20" r="8" fill="#4a7a4a"/>
+                    <ellipse cx="24" cy="18" rx="3" ry="6" fill="#2e663a"/>
+                    <ellipse cx="36" cy="18" rx="3" ry="6" fill="#2e663a"/>
+                    <line x1="30" y1="28" x2="30" y2="45" stroke="#4a7a4a" stroke-width="3"/>
+                    <line x1="24" y1="35" x2="16" y2="44" stroke="#4a7a4a" stroke-width="3"/>
+                    <line x1="36" y1="35" x2="44" y2="44" stroke="#4a7a4a" stroke-width="3"/>
+                </svg>
             </div>
+            <div class="species-name">Insects</div>
         </div>
-        <div class="gate-base"></div>
-        <div class="gate-label">GARDEN GATE</div>
+
+        <!-- Bird -->
+        <div class="species-item">
+            <div class="species-icon">
+                <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="30" cy="30" rx="12" ry="10" fill="#1c5c5c"/>
+                    <circle cx="24" cy="26" r="2" fill="#1a1a1a"/>
+                    <path d="M20 28C20 28 18 26 16 28" stroke="#1a5a5a" stroke-width="1.5" fill="none"/>
+                    <path d="M16 32C16 32 10 28 8 30C6 32 10 36 16 34" fill="#1c5c5c"/>
+                    <path d="M44 32C44 32 50 28 52 30C54 32 50 36 44 34" fill="#1c5c5c"/>
+                    <path d="M34 26L40 22L38 28Z" fill="#2a7a7a"/>
+                    <ellipse cx="30" cy="38" rx="6" ry="3" fill="#1a5a5a"/>
+                </svg>
+            </div>
+            <div class="species-name">Bird</div>
+        </div>
+
+        <!-- Plant -->
+        <div class="species-item">
+            <div class="species-icon">
+                <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 45V25" stroke="#4a7a4a" stroke-width="3"/>
+                    <path d="M22 20C22 20 20 16 22 14C24 12 26 14 26 16" fill="none" stroke="#5a9d5f" stroke-width="2"/>
+                    <path d="M30 18C30 18 30 14 30 12C30 10 32 10 32 12C32 14 32 18 32 18" fill="none" stroke="#5a9d5f" stroke-width="2"/>
+                    <path d="M38 20C38 20 40 16 38 14C36 12 34 14 34 16" fill="none" stroke="#5a9d5f" stroke-width="2"/>
+                    <ellipse cx="24" cy="22" rx="4" ry="6" fill="#6db87f"/>
+                    <ellipse cx="30" cy="20" rx="4" ry="6" fill="#6db87f"/>
+                    <ellipse cx="36" cy="22" rx="4" ry="6" fill="#6db87f"/>
+                    <circle cx="26" cy="28" r="3" fill="#8bc98b"/>
+                    <circle cx="34" cy="28" r="3" fill="#8bc98b"/>
+                </svg>
+            </div>
+            <div class="species-name">Flora</div>
+        </div>
     </div>
+
+    <div class="gate-arch"></div>
 </div>
 
 <!-- Modal -->
@@ -1027,33 +1386,33 @@ function showPlantInfo(plantId) {
             <h3>Growing Requirements</h3>
             <div class="info-grid">
                 <div class="info-item">
-                    <div class="info-label">☀️ Sunlight</div>
+                    <div class="info-label">Sunlight</div>
                     <div class="info-value">${plant.sunlight}</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">🌡️ Sun Resistance</div>
+                    <div class="info-label">Sun Resistance</div>
                     <div class="info-value">${plant.sunResistant}</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">💧 Water Needs</div>
+                    <div class="info-label">Water Needs</div>
                     <div class="info-value">${plant.waterNeeds}</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">🌡️ Temperature Range</div>
+                    <div class="info-label">Temperature Range</div>
                     <div class="info-value">${plant.temperature}</div>
                 </div>
             </div>
         </div>
 
         <div class="strengths">
-            <h4>✅ Strengths</h4>
+            <h4>Strengths</h4>
             <ul>
                 ${plant.strengths.map(s => `<li>${s}</li>`).join('')}
             </ul>
         </div>
 
         <div class="weaknesses">
-            <h4>⚠️ Weaknesses & Care Tips</h4>
+            <h4>Care Considerations</h4>
             <ul>
                 ${plant.weaknesses.map(w => `<li>${w}</li>`).join('')}
             </ul>
@@ -1068,7 +1427,6 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
-// Close modal when clicking outside
 window.onclick = function(event) {
     const modal = document.getElementById('plantModal');
     if (event.target == modal) {
@@ -1076,7 +1434,6 @@ window.onclick = function(event) {
     }
 }
 
-// Close modal with Escape key
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeModal();
